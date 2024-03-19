@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy
+    volumes:
+      - type: bind
+        source: ./local/emails
+        target: /site_config
+    ports:
+      - "7778:7778"
+    command: [
+      "--provider=github",
+      "--upstream=http://localhost:7777/#/",
+      "--http-address=:7778",
+      "--authenticated-emails-file=/site_config/email_list.txt",
+      "--scope=user:email",
+      "--cookie-expire=0h0m30s",
+      "--session-cookie-minimal=true",
+      "--skip-provider-button=true",
+      "--cookie-secret=qyA4BGc7vEo2R1fHtm6ZFzvu45ox_b_owGh1pzADxsA=",
+      "--client-id=d646e9ffb8fe8074b698",
+      "--client-secret=762f314db2bc47df8ae5563034f507ccff9298d3",
+      "--cookie-csrf-per-request=true",
+      "--redirect-url=http://localhost:7777/#/",
+      "--cookie-secure=false",
+      "--cookie-csrf-expire=5m"
+    ]
+    restart: unless-stopped
